@@ -34,7 +34,7 @@ class CuentaAhorro(CuentaBancaria):
 
     def calcular_interes(self):
         ganancia = self._saldo * self.interes
-        self.saldo += ganancia
+        self._saldo += ganancia
         print(f"La ganancia es de {ganancia}. Su nuevo saldo es de {self._saldo}")
 
     def __str__(self)-> str:
@@ -114,10 +114,38 @@ while True:
                     banco.cuentas[seleccion].depositar(monto)
                 else:
                     print("Selección inválida.")
-                                     
+        case 3:
+            if not banco.cuentas:
+                print("No hay cuentas creadas aún.")
+            else:
+                print("\n--- Seleccione la cuenta para depositar ---")
+                for i, cuenta in enumerate(banco.cuentas):
+                    print(f"{i+1}. {cuenta}")
+                seleccion = int(input("Ingrese el número de la cuenta: ")) - 1
+
+                if 0 <= seleccion < len(banco.cuentas):
+                    monto = float(input("Ingrese el monto a retirar: "))
+                    banco.cuentas[seleccion].retirar(monto)
+                else:
+                    print("Selección inválida.")
+        case 4:
+            if not banco.cuentas:
+                print("No hay cuentas creadas aún")
+            else:
+                print("\n--- Seleccione la cuenta para depositar ---")
+                for i, cuenta in enumerate(banco.cuentas):
+                    print(f"{i+1}.{cuenta}")
+                seleccion = int(input("Ingrese el numero de la cuenta: "))-1
+
+                if 0 <= seleccion < len(banco.cuentas):
+                    if isinstance(banco.cuentas[seleccion], CuentaAhorro):
+                        banco.cuentas[seleccion].calcular_interes()
+                    elif isinstance(banco.cuentas[seleccion], CuentaCorriente):
+                        print("No se puede calcular intereses en una cuenta corriente")                            
         case 5:
             banco.mostrar_cuentas()
         case 6:
             print("Gracias por usar nuestro sistema")
+            break
         case _:
             print("Opcion no valida")
